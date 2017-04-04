@@ -10,6 +10,9 @@ class RotationalCipher(unittest.TestCase):
     def test_rotate_a_by_26(self):
         self.assertEqual(rotational_cipher.rotate('a', 26), 'a')
 
+    def test_rotate_a_with_six_circles_and_plus_one(self):
+        self.assertEqual(rotational_cipher.rotate('a', 26 * 6 + 1), 'b')
+
     def test_rotate_a_by_0(self):
         self.assertEqual(rotational_cipher.rotate('a', 0), 'a')
 
