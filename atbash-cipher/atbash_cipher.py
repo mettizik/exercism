@@ -1,4 +1,5 @@
 import string
+from textwrap import wrap
 
 direct = string.ascii_lowercase
 backw = string.ascii_lowercase[-1:0:-1] + string.ascii_lowercase[0]
@@ -12,7 +13,7 @@ def encode(data):
         elif ch.isnumeric():
             encoded += ch
     
-    return encoded
+    return ' '.join(wrap(encoded, 5))
 
 def decode(data):
     data = data.lower()
@@ -22,5 +23,5 @@ def decode(data):
             decoded += direct[backw.index(ch)]
         elif ch.isnumeric():
             decoded += ch
-    
+
     return decoded
