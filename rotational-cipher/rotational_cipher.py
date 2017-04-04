@@ -17,5 +17,3 @@ def rotate(data, shifter):
             retval += d
 
     return retval
-
-rotate('O M G', 5)
