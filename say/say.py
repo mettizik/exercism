@@ -50,5 +50,3 @@ def say(number):
         return 'zero'
     
     return get_name(number)
-
-print(say(100))
