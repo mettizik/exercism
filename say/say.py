@@ -32,10 +32,12 @@ def get_name(number):
                 if hundreds > 0:
                     components += [prehandred_name(hundreds)]
                     components.append('hundred')
-                    if lowest > 0 or number > 0:
+                    if lowest > 0:
                         components.append('and')
+
                 if lowest > 0:
                     components.append(prehandred_name(lowest))
+                    
                 bases = temp()
                 components.append(nulls[-bases.index(base) - 1])                
 
