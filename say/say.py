@@ -36,16 +36,20 @@ def get_base_text(hundreds, rest, base, components):
 
     return False
 
+def split_number_to_parts(number, base):
+    stripped = int(number / base)
+    hundreds = int(stripped / 100)
+    assert(hundreds < 10)
+    lowest = stripped % 100
+    assert(lowest < 100)
+    return hundreds, lowest
+
 def get_name(number):
     components = []
     bases = [0, 10, 100] + [10**i for i in range(3, 13, 3)]
     if number > 99:
         for base in bases[-1:1:-1]:
-            stripped = int(number / base)
-            lowest = stripped % 100
-            assert(lowest < 100)
-            hundreds = int(stripped / 100)
-            assert(hundreds < 10)
+            hundreds, lowest = split_number_to_parts(number, base)
             if get_base_text(hundreds, lowest, base, components):
                 number = number - (hundreds * 100 + lowest) * base
 
