@@ -4,7 +4,7 @@ nulls = [
 
 def prehandred_name(index):    
     tens = [
-        '', nulls[1], 'twenty', 'thirty', 'fourty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
+        '', nulls[1], 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
     ]
     units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
     teens = ['', 'eleven', 'twelve', 'thirteen'] + [i + 'teen' for i in units[4:]]
@@ -23,18 +23,24 @@ def get_name(number):
     if number > 99:
         for base in temp()[:-2]:
             hundreds = int(number / base)
-            assert(hundreds < 100)
             lowest = hundreds % 100
             hundreds = int(hundreds / 100)
+            assert(hundreds < 10)
             assert(lowest < 100)
             if lowest + hundreds > 0:
+                number = number - (hundreds * 100 + lowest) * base
                 if hundreds > 0:
                     components += [prehandred_name(hundreds)]
-                if lowest > 0:                    
+                    components.append('hundred')
+                    if lowest > 0 or number > 0:
+                        components.append('and')
+                if lowest > 0:
                     components.append(prehandred_name(lowest))
                 bases = temp()
-                components.append(nulls[-bases.index(base) - 1])
-                number = number - (hundreds * 100 + lowest) * base    
+                components.append(nulls[-bases.index(base) - 1])                
+
+        if number != 0:
+            components.append('and')
 
     if number != 0:
         components.append(prehandred_name(number))
@@ -50,3 +56,5 @@ def say(number):
         return 'zero'
     
     return get_name(number)
+
+say(810000)
