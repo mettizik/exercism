@@ -20,7 +20,11 @@ def add_basename(components, base):
     if base >= 100:
         components.append(nulls[bases.index(base)])
 
-def get_base_text(hundreds, rest, base, components):    
+def get_base_text(hundreds, rest, base, components):
+    if base == 0:
+        components.append(prehandred_name(rest))
+        return True
+    
     if rest + hundreds > 0:        
         if hundreds > 0:
             components += [prehandred_name(hundreds)]
@@ -51,25 +55,33 @@ def split_number(number):
         if hundreds + lowest > 0:
             number -= (hundreds * 100 + lowest) * base
             chunks[base] = (hundreds, lowest)
+    
+    if number > 0:
+        chunks[0] = (0, number)
 
-    return number, chunks
+    return chunks
+
+def complex_number_to_text(number):
+    chunks = split_number(number)
+    components = []
+    for base in [base for base in reversed(bases) if base in chunks and base != 0]:
+        numparts = chunks[base]
+        get_base_text(numparts[0], numparts[1], base, components)
+
+    if 0 in chunks:
+        components.append('and')
+        numparts = chunks[0]
+        get_base_text(numparts[0], numparts[1], 0, components)
+
+    return ' '.join(components)    
 
 
 def get_name(number):
-    components = []
-    if number > 99:
-        number, chunks = split_number(number)
-        for base in [base for base in reversed(bases) if base in chunks]:
-            numparts = chunks[base]
-            get_base_text(numparts[0], numparts[1], base, components)
+    if number < 100:
+        return prehandred_name(number)
 
-        if number != 0:
-            components.append('and')
-
-    if number != 0:
-        components.append(prehandred_name(number))
-
-    return ' '.join(components)
+    else:
+        return complex_number_to_text(number)
 
 
 def say(number):
