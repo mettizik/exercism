@@ -70,8 +70,7 @@ def complex_number_to_text(number):
 
     if 0 in chunks:
         components.append('and')
-        numparts = chunks[0]
-        get_base_text(numparts[0], numparts[1], 0, components)
+        components.append(prehandred_name(chunks[0][1]))
 
     return ' '.join(components)    
 
