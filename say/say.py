@@ -1,7 +1,8 @@
-def prehandred_name(index):
-    nulls = [
-        'zero', 'ten', 'hundred', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 
+nulls = [
+        'zero', 'ten', 'hundred', 'thousand', 'million', 'billion', 'trillion'
     ]
+
+def prehandred_name(index):    
     tens = [
         '', nulls[1], 'twenty', 'thirty', 'fourty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
     ]
@@ -14,16 +15,40 @@ def prehandred_name(index):
     return nums[index]
 
 def temp():
-    return [0, 1, 10] + [10**i for i in range(3, 13, 3)]
+    return [10**i for i in range(12, 2, -3)] + [100, 10, 0]
 
 
-def get_name(number, base):
-    return None
+def get_name(number):
+    components = []
+    if number > 99:
+        for base in temp()[:-2]:
+            hundreds = int(number / base)
+            assert(hundreds < 100)
+            lowest = hundreds % 100
+            hundreds = int(hundreds / 100)
+            assert(lowest < 100)
+            if lowest + hundreds > 0:
+                if hundreds > 0:
+                    components += [prehandred_name(hundreds)]
+                if lowest > 0:                    
+                    components.append(prehandred_name(lowest))
+                bases = temp()
+                components.append(nulls[-bases.index(base) - 1])
+                number = number - (hundreds * 100 + lowest) * base    
+
+    if number != 0:
+        components.append(prehandred_name(number))
+
+    return ' '.join(components)
+
 
 def say(number):
+    if number < 0 or number > 999999999999:
+        raise AttributeError('Value does not fit in range')
+
     if number == 0:
         return 'zero'
-    if number < 100:
-        return prehandred_name(number)
+    
+    return get_name(number)
 
-    return ''
+print(say(100))
