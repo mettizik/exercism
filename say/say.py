@@ -44,20 +44,30 @@ def split_number_to_parts(number, base):
     assert(lowest < 100)
     return hundreds, lowest
 
+def split_number(number):
+    chunks = {}
+    for base in reversed(bases[2:]):
+        hundreds, lowest = split_number_to_parts(number, base)
+        if hundreds + lowest > 0:
+            number -= (hundreds * 100 + lowest) * base
+            chunks[base] = (hundreds, lowest)
+
+    return number, chunks
+
+
 def get_name(number):
     components = []
-    bases = [0, 10, 100] + [10**i for i in range(3, 13, 3)]
     if number > 99:
-        for base in bases[-1:1:-1]:
-            hundreds, lowest = split_number_to_parts(number, base)
-            if get_base_text(hundreds, lowest, base, components):
-                number = number - (hundreds * 100 + lowest) * base
+        number, chunks = split_number(number)
+        for base in [base for base in reversed(bases) if base in chunks]:
+            numparts = chunks[base]
+            get_base_text(numparts[0], numparts[1], base, components)
 
         if number != 0:
             components.append('and')
 
     if number != 0:
-        get_base_text(0, number, 0, components)
+        components.append(prehandred_name(number))
 
     return ' '.join(components)
 
