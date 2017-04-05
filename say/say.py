@@ -14,32 +14,28 @@ def prehandred_name(index):
 
     return nums[index]
 
-def temp():
-    return [10**i for i in range(12, 2, -3)] + [100, 10, 0]
-
-
 def get_name(number):
     components = []
+    bases = [0, 10, 100] + [10**i for i in range(3, 13, 3)]
     if number > 99:
-        for base in temp()[:-2]:
-            hundreds = int(number / base)
-            lowest = hundreds % 100
-            hundreds = int(hundreds / 100)
-            assert(hundreds < 10)
+        for base in bases[-1:1:-1]:
+            stripped = int(number / base)
+            lowest = stripped % 100
             assert(lowest < 100)
+            hundreds = int(stripped / 100)
+            assert(hundreds < 10)            
             if lowest + hundreds > 0:
                 number = number - (hundreds * 100 + lowest) * base
                 if hundreds > 0:
                     components += [prehandred_name(hundreds)]
-                    components.append('hundred')
+                    components.append(nulls[bases.index(100)])
                     if lowest > 0:
                         components.append('and')
 
                 if lowest > 0:
                     components.append(prehandred_name(lowest))
                     
-                bases = temp()
-                components.append(nulls[-bases.index(base) - 1])                
+                components.append(nulls[bases.index(base)])
 
         if number != 0:
             components.append('and')
