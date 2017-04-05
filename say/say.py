@@ -27,7 +27,7 @@ def get_base_text(hundreds, rest, base, components):
     
     if rest + hundreds > 0:        
         if hundreds > 0:
-            components += [prehandred_name(hundreds)]
+            components.append(prehandred_name(hundreds))
             add_basename(components, 100)
             if rest > 0:
                 components.append('and')
@@ -75,15 +75,6 @@ def complex_number_to_text(number):
 
     return ' '.join(components)    
 
-
-def get_name(number):
-    if number < 100:
-        return prehandred_name(number)
-
-    else:
-        return complex_number_to_text(number)
-
-
 def say(number):
     if number < 0 or number > 999999999999:
         raise AttributeError('Value does not fit in range')
@@ -91,6 +82,8 @@ def say(number):
     if number == 0:
         return 'zero'
     
-    return get_name(number)
+    if number < 100:
+        return prehandred_name(number)
 
-say(1234)
+    else:
+        return complex_number_to_text(number)
