@@ -1,29 +1,32 @@
+from math import log10
+
 _mask = {
     0: '',
-    1: '*',
-    2: '**',
-    3: '***',
-    4: '*+',
-    5: '+',
-    6: '+*',
-    7: '+**',
-    8: '+***',
-    9: '*++',
-    10: '++'
+    1: '0',
+    2: '00',
+    3: '000',
+    4: '01',
+    5: '1',
+    6: '10',
+    7: '100',
+    8: '1000',
+    9: '02',
+    10: '2'
 }
 
-_letters = ['I', 'V', 'X', 'L', 'C', 'D', 'M', 'Z', 'Y']
+_letters = [
+    ['I', 'V', 'X'], 
+    ['X', 'L', 'C'],
+    ['C', 'D', 'M'],
+    ['M'] # Dummy letter for numbers from 1999 to 3000
+]
+
+def impl(numb, base):
+    if base < 1:
+        return ''
+    digit, rest = divmod(numb, base)    
+    letters = _letters[int(log10(base))]
+    return ''.join([letters[int(c)] for c in _mask[digit]]) + impl(rest, int(base / 10))
 
 def numeral(numb):
-    if numb < 10:
-        letters = _letters[0:3]
-        return _mask[numb].replace('++', letters[2]).replace('+', letters[1]).replace('*', letters[0])
-    if numb < 100:        
-        letters = _letters[2:5]        
-        return _mask[int(numb / 10)].replace('++', letters[2]).replace('+', letters[1]).replace('*', letters[0]) + numeral(numb - int(numb / 10) * 10)
-    if numb < 1000:
-        letters = _letters[4:7]        
-        return _mask[int(numb / 100)].replace('++', letters[2]).replace('+', letters[1]).replace('*', letters[0]) + numeral(numb - int(numb / 100) * 100)
-    if numb < 10000:
-        letters = _letters[6:]        
-        return _mask[int(numb / 1000)].replace('++', letters[2]).replace('+', letters[1]).replace('*', letters[0]) + numeral(numb - int(numb / 1000) * 1000)
+    return impl(numb, 10**int(log10(numb)))
